@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<robot name="bot_q_tms" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <!-- Add Common Xacro: transmissions, colors -->
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/values.urdf.xacro" />
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/materials.urdf.xacro" />
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/transmission.urdf.xacro" />
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/controllers.urdf.xacro" />
+
+
+  <!-- Add URDF: links, joints -->
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/base/base.urdf.xacro" />
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/extruder/extruder.urdf.xacro" />
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/carrier/carrier.urdf.xacro" />
+
+
+  <!-- Add URDF: gazebo -->
+  <xacro:include filename="$(find bot_q_tms_description)/urdf/gazebo.urdf.xacro" />
+
+
+  <!-- Add variables -->
+  <xacro:arg name="robot_name"      default="bot_q_tms" />
+  <xacro:arg name="enable_gz"       default="False" />
+  <xacro:arg name="enable_carrier"  default="False" />
+
+
+  <!-- Connect the Links and Joints -->
+  <link name="base_footprint" />
+
+  <xacro:base      prefix="base"      parent="base_footprint">
+    <xacro:if value="${$(arg enable_carrier)}">
+      <origin xyz="0.0 0.0 ${0.1058+0.008+0.1742}" rpy="0 0 0"/>
+    </xacro:if>
+    <xacro:unless value="${$(arg enable_carrier)}">
+      <origin xyz="0.0 0.0 ${0.1058+0.008}" rpy="0 0 0"/>
+    </xacro:unless>
+  </xacro:base>
+
+  <xacro:extruder  prefix="extruder"  parent="base_body_link" />
+
+  <xacro:if value="${$(arg enable_carrier)}">
+    <xacro:carrier prefix="carrier"  parent="base_body_link" />
+  </xacro:if>
+
+
+  <!-- Add Dynamixel: plugins -->
+  <xacro:controllers name="joints_control" enable_gz="$(arg enable_gz)" robot_name="$(arg robot_name)" />
+
+
+  <!-- Add Gazebo: plugins -->
+  <xacro:if value="${$(arg enable_gz)}">
+    <xacro:gazebo_sensors robot_name="$(arg robot_name)"/>
+  </xacro:if>
+
+</robot>
