@@ -1,0 +1,43 @@
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+    robot_name = 'bot_q_tms'
+    robot_id = 0
+
+    rviz_config = PathJoinSubstitution([
+            FindPackageShare('bot_q_tms_bringup'),
+            'rviz',
+            'real.rviz'
+    ])
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        arguments=['-d', rviz_config],
+        output='screen',
+    )
+
+    return LaunchDescription([
+        # Launch Robot No. 1
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([
+                PathJoinSubstitution([
+                    FindPackageShare('bot_q_tms_bringup'),
+                    'launch',
+                    'robot.launch.py'
+                ])
+            ]),
+            launch_arguments={
+                'robot_name'     : robot_name if robot_id == 0 else robot_name + '_' + str(robot_id),
+                'enable_gz'      : 'False',
+                'enable_carrier' : 'False',
+            }.items()
+        ),
+        rviz_node,
+    ])
