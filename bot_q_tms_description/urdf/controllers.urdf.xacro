@@ -21,7 +21,7 @@
       <joint name="base_spool_joint">
         <xacro:unless value="${$(arg enable_gz)}">
           <param name="id">1</param>
-          <param name="control_mode">0</param>
+          <param name="control_mode">1</param>
           <param name="interface">rs</param>
         </xacro:unless>
         <command_interface name="velocity"/>
@@ -32,7 +32,7 @@
       <joint name="base_guider_joint">
         <xacro:unless value="${$(arg enable_gz)}">
           <param name="id">2</param>
-          <param name="control_mode">0</param>
+          <param name="control_mode">1</param>
           <param name="interface">rs</param>
         </xacro:unless>
         <command_interface name="velocity"/>
@@ -43,7 +43,7 @@
       <joint name="extruder_gear_joint">
         <xacro:unless value="${$(arg enable_gz)}">
           <param name="id">3</param>
-          <param name="control_mode">0</param>
+          <param name="control_mode">1</param>
           <param name="interface">rs</param>
         </xacro:unless>
         <command_interface name="velocity"/>
