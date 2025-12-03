@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Bot-Q TMS (Gazebo) -->
+<robot name="bot_q_tms_gazebo" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="gazebo_sensors" params="robot_name">
+
+    <!-- Publish Joint States -->
+    <gazebo>
+      <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+        <topic>${robot_name}/joint_states</topic>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+</robot>
